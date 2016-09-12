@@ -1,8 +1,12 @@
 #!flask/bin/python
 # coding: utf-8
 from flask import Flask, jsonify
+from flask_cors import CORS
+
+from parser import get_movies
 
 app = Flask(__name__)
+CORS(app)
 
 movies = [
     {
@@ -201,9 +205,11 @@ movies = [
     }
 ]
 
+
 @app.route('/movies', methods=['GET'])
-def get_movies():
-    return jsonify({'movies': movies})
+def get_all_movies():
+    movies_to_return = get_movies()
+    return jsonify({'movies': movies_to_return})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(threaded=True)
