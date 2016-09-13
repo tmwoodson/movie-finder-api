@@ -11,56 +11,61 @@ expected_movies = {}
 expected_movies['kittens'] = {
     'Title': 'A Fake Movie',
     'HasImdb': True,
-    'Theaters': {
-        'Alamo Drafthouse Cinema - New Mission': {
+    'Theaters': [
+        {
+            'Name': 'Alamo Drafthouse Cinema - New Mission',
             'Info': 'Near the Old Popeye\'s',
             'Showtimes': {
                 '0': ['1:40pm', '7:40pm', '10:45pm']
             }
         }
-    }
+    ]
 }
 expected_movies['meow'] = {
     'Title': 'Two Cats One Bowl',
     'HasImdb': True,
-    'Theaters': {
-        'Roxie Theater': {
+    'Theaters': [
+        {
+            'Name': 'Roxie Theater',
             'Info': 'By Crackheads',
             'Showtimes': {
                 '0': ['2:00pm']
             }
         }
-    }
+    ]
 }
 expected_movies['12345'] = {
     'Title': 'Big Momma\'s House',
     'HasImdb': True,
-    'Theaters': {
-        'Alamo Drafthouse Cinema - New Mission': {
+    'Theaters': [
+        {
+            'Name': 'Alamo Drafthouse Cinema - New Mission',
             'Info': 'Near the Old Popeye\'s',
             'Showtimes': {
                 '0': ['9:40pm', '10:45pm']
             }
         }
-    }
+    ]
 }
 expected_movies['Something Really Obscure'] = {
     'Title': 'Something Really Obscure',
     'HasImdb': False,
-    'Theaters': {
-        'Alamo Drafthouse Cinema - New Mission': {
+    'Theaters': [
+        {
+            'Name': 'Alamo Drafthouse Cinema - New Mission',
             'Info': 'Near the Old Popeye\'s',
             'Showtimes': {
                 '0': ['9:00pm']
             }
         },
-        'Roxie Theater': {
+        {
+            'Name': 'Roxie Theater',
             'Info': 'By Crackheads',
             'Showtimes': {
                 '0': ['7:20pm', '9:45pm']
             }
         }
-    }
+    ]
 }
 
 class APITestCase(unittest.TestCase):
@@ -184,10 +189,14 @@ class ParserTestCase(unittest.TestCase):
                              'has_imdb mismatch for movie id ' + movie_id)
             expected_theaters = expected['Theaters']
             found_theaters = found['Theaters']
-            self.assertEqual(len(found_theaters.keys()), len(expected_theaters.keys()), 'not the expected number of theaters for movie ' + movie_id)
-            for theater_name in expected_theaters:
-                expected_theater = expected_theaters[theater_name]
-                found_theater = found_theaters[theater_name]
+            self.assertEqual(len(found_theaters), len(expected_theaters), 'not the expected number of theaters for movie ' + movie_id)
+            for expected_theater in expected_theaters:
+                theater_name = expected_theater['Name']
+                found_theater_list = [theater for theater in found_theaters if theater['Name'] == theater_name]
+                if len(found_theater_list) > 0:
+                    found_theater = found_theater_list[0]
+                else:
+                    found_theater = {}
                 self.assertEqual(expected_theater['Info'], found_theater['Info'], 'theater info does not match for theater ' + theater_name)
                 expected_showtimes = expected_theater['Showtimes']['0']
                 found_showtimes = found_theater['Showtimes']['0']
@@ -204,7 +213,8 @@ class MovieAPIHelperTestCase(unittest.TestCase):
         first_movie = joined_movies[0]
         self.assertTrue('Title' in first_movie, 'movie output does not have a title')
         self.assertTrue('Theaters' in first_movie, 'movie output does not have a theater')
-        self.assertTrue('Roxie Theater' in first_movie['Theaters'], 'missing theater data in movie list')
+        movie_theater_names = [theater['Name'] for theater in first_movie['Theaters']]
+        self.assertTrue('Roxie Theater' in movie_theater_names, 'missing theater data in movie list')
 
 
 if __name__ == '__main__':

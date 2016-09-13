@@ -57,7 +57,7 @@ def get_movies_from_html(data):
 
         for movie in theater.find_all('div', class_='movie'):
             showtimes = get_movie_showtimes(movie)
-            theater_data = {'Info': theater_info, 'Showtimes': {'0': showtimes}}
+            theater_data = {'Info': theater_info, 'Name': theater_name, 'Showtimes': {'0': showtimes}}
             movie_title = get_movie_title(movie)
             movie_imdb_id = get_imdb_id(movie)
             movie_identifier = movie_imdb_id
@@ -66,8 +66,8 @@ def get_movies_from_html(data):
                 movie_identifier = movie_title
                 has_imdb = False
             if movie_identifier not in movies:
-                movies[movie_identifier] = {'Title': movie_title, 'HasImdb': has_imdb, 'Theaters': {}}
-            movies[movie_identifier]['Theaters'][theater_name] = theater_data
+                movies[movie_identifier] = {'Title': movie_title, 'HasImdb': has_imdb, 'Theaters': []}
+            movies[movie_identifier]['Theaters'].append(theater_data)
 
     return movies
 
