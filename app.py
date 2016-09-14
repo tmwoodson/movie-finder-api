@@ -1,9 +1,12 @@
 #!flask/bin/python
 # coding: utf-8
+import os
 from flask import Flask, jsonify
 from flask_cors import CORS
 
 from parser import get_movies
+
+port = os.getenv('PORT', '5000')
 
 app = Flask(__name__)
 CORS(app)
@@ -212,4 +215,4 @@ def get_all_movies():
     return jsonify({'movies': movies_to_return})
 
 if __name__ == '__main__':
-    app.run(threaded=True)
+    app.run(threaded=True, port=port, host='0.0.0.0')

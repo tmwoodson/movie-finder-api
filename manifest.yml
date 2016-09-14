@@ -1,0 +1,4 @@
+---
+applications:
+- name: movie-finder-api
+  command: python ./app.py
