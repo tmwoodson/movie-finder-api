@@ -3,7 +3,7 @@ fake_data = '<div id="movie-results">' \
                 '<div class="theater">' \
                     '<div class="desc" id="theater_1">' \
                         '<h2 class="name">' \
-                            '<a href="">Alamo Drafthouse Cinema - New Mission</a>' \
+                            '<a href="/movies/?alamo">Alamo Drafthouse Cinema - New Mission</a>' \
                         '</h2>' \
                         '<div class="info">' \
                             'Near the Old Popeye\'s'\
@@ -51,7 +51,7 @@ fake_data = '<div id="movie-results">' \
                 '<div class="theater">' \
                     '<div class="desc" id="theater_1">' \
                         '<h2 class="name">' \
-                            '<a href="">Roxie Theater</a>' \
+                            '<a href="/movies/?roxie">Roxie Theater</a>' \
                         '</h2>' \
                         '<div class="info">' \
                             'By Crackheads'\
@@ -84,7 +84,7 @@ fake_data = '<div id="movie-results">' \
                 '</div>' \
             '</div>'
 
-def fetch_html(use_fake = False):
+def fetch_html(use_fake = True):
     if use_fake:
         return fake_data
     else:

@@ -42,6 +42,14 @@ def get_theater_name(theater_node):
     name = name_anchor.string
     return name
 
+def get_theater_href(theater_node):
+    desc_node = theater_node.find('div', class_='desc')
+    name_node = desc_node.find('h2', class_='name')
+    anchor = name_node.find('a')
+    href = 'https://google.com' + anchor['href']
+    return href
+
+
 def get_theater_info(theater_node):
     desc_node = theater_node.find('div', class_='desc')
     info_node = desc_node.find('div', class_='info')
@@ -53,11 +61,12 @@ def get_movies_from_html(data):
     movies = {}
     for theater in soup.find_all('div', class_='theater'):
         theater_name = get_theater_name(theater)
+        theater_href = get_theater_href(theater)
         theater_info = get_theater_info(theater)
 
         for movie in theater.find_all('div', class_='movie'):
             showtimes = get_movie_showtimes(movie)
-            theater_data = {'Info': theater_info, 'Name': theater_name, 'Showtimes': {'0': showtimes}}
+            theater_data = {'Info': theater_info, 'Name': theater_name, 'Url': theater_href, 'Showtimes': {'0': showtimes}}
             movie_title = get_movie_title(movie)
             movie_imdb_id = get_imdb_id(movie)
             movie_identifier = movie_imdb_id

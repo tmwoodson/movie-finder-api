@@ -8,12 +8,14 @@ from html_fetcher import fetch_html
 import parser
 
 expected_movies = {}
+expected_theater_url_base = 'https://google.com/movies/?'
 expected_movies['kittens'] = {
     'Title': 'A Fake Movie',
     'HasImdb': True,
     'Theaters': [
         {
             'Name': 'Alamo Drafthouse Cinema - New Mission',
+            'Url': expected_theater_url_base + 'alamo',
             'Info': 'Near the Old Popeye\'s',
             'Showtimes': {
                 '0': ['1:40pm', '7:40pm', '10:45pm']
@@ -27,6 +29,7 @@ expected_movies['meow'] = {
     'Theaters': [
         {
             'Name': 'Roxie Theater',
+            'Url': expected_theater_url_base + 'roxie',
             'Info': 'By Crackheads',
             'Showtimes': {
                 '0': ['2:00pm']
@@ -40,6 +43,7 @@ expected_movies['12345'] = {
     'Theaters': [
         {
             'Name': 'Alamo Drafthouse Cinema - New Mission',
+            'Url': expected_theater_url_base + 'alamo',
             'Info': 'Near the Old Popeye\'s',
             'Showtimes': {
                 '0': ['9:40pm', '10:45pm']
@@ -53,6 +57,7 @@ expected_movies['Something Really Obscure'] = {
     'Theaters': [
         {
             'Name': 'Alamo Drafthouse Cinema - New Mission',
+            'Url': expected_theater_url_base + 'alamo',
             'Info': 'Near the Old Popeye\'s',
             'Showtimes': {
                 '0': ['9:00pm']
@@ -60,6 +65,7 @@ expected_movies['Something Really Obscure'] = {
         },
         {
             'Name': 'Roxie Theater',
+            'Url': expected_theater_url_base + 'roxie',
             'Info': 'By Crackheads',
             'Showtimes': {
                 '0': ['7:20pm', '9:45pm']
@@ -160,6 +166,23 @@ class ParserTestCase(unittest.TestCase):
         result = parser.get_theater_name(soup)
         self.assertEqual(result, theater_name, 'theater name does not match')
 
+    def test_theater_href(self):
+        theater_href = '/movies?near=san+francisco,+ca,+usa&tid=2'
+        theater_text = '<div class="theater">' \
+                            '<div class="desc" id="theater_1">' \
+                                '<h2 class="name">' \
+                                    '<a href="' + theater_href + '">Some Theater</a>' \
+                                '</h2>' \
+                                '<div class="info"></div>' \
+                            '</div>' \
+                            '<div class="showtimes"></div>' \
+                        '</div>'
+        soup = BeautifulSoup(theater_text, 'html.parser')
+        result = parser.get_theater_href(soup)
+        expected_result = 'https://google.com' + theater_href
+        self.assertEqual(result, expected_result, 'theater href does not match')
+
+
     def test_theater_info(self):
         theater_info = 'in C-Stat\'s room'
         theater_text = '<div class="theater">' \
@@ -197,7 +220,9 @@ class ParserTestCase(unittest.TestCase):
                     found_theater = found_theater_list[0]
                 else:
                     found_theater = {}
+
                 self.assertEqual(expected_theater['Info'], found_theater['Info'], 'theater info does not match for theater ' + theater_name)
+                self.assertEqual(expected_theater['Url'], found_theater['Url'], 'theater url does not match for ' + theater_name)
                 expected_showtimes = expected_theater['Showtimes']['0']
                 found_showtimes = found_theater['Showtimes']['0']
                 self.assertEqual(expected_showtimes, found_showtimes, 'showtimes do not match for ' + theater_name + ' and ' + movie_id)
