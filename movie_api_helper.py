@@ -101,4 +101,5 @@ def get_joined_movie_data(movie_identifier, movie, use_fake):
     if type(result).__name__ != 'dict':
         result = json.loads(result)
     result['Theaters'] = movie['Theaters']
+    result['imdbUrl'] = movie['imdbUrl']
     return result

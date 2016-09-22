@@ -17,7 +17,7 @@ fake_data = '<div id="movie-results">' \
                             '</div>' \
                             '<span class="info">' \
                                 '<a href="whatevs.com" />' \
-                                '<a href="/url?q=http://www.imdb.com/title/kittens/&sa=X&oi=moviesi&ii=0&usg=AFQjCNFaxtGvAozK7bKUhg92U-J8gWmTEw" />' \
+                                '<a href="/url?q=http://www.imdb.com/title/kittens" />' \
                             '</span>' \
                             '<div class="times">' \
                                 '<span style="color:#666"><span style="padding:0 "></span><!-- -->1:40</span>' \
@@ -30,7 +30,7 @@ fake_data = '<div id="movie-results">' \
                                 '<a href="fake.com">Big Momma\'s House</a>' \
                             '</div>' \
                             '<span class="info">' \
-                                '<a href="/url?q=http://www.imdb.com/title/12345/&sa=X&oi=moviesi&ii=0&usg=AFQjCNFaxtGvAozK7bKUhg92U-J8gWmTEw" />' \
+                                '<a href="/url?q=http://www.imdb.com/title/12345" />' \
                             '</span>' \
                             '<div class="times">' \
                                 '<span style="color:"><span style="padding:0 "></span><!-- --><a class="fl" href="/url?q=http://www.movietickets.com">9:40</a></span>' \
@@ -64,7 +64,7 @@ fake_data = '<div id="movie-results">' \
                                 '<a href="fake.com">Two Cats One Bowl</a>' \
                             '</div>' \
                             '<span class="info">' \
-                                '<a href="/url?q=http://www.imdb.com/title/meow/&sa=X&oi=moviesi&ii=0&usg=AFQjCNFaxtGvAozK7bKUhg92U-J8gWmTEw" />' \
+                                '<a href="/url?q=http://www.imdb.com/title/meow" />' \
                             '</span>' \
                             '<div class="times">' \
                                 '<span style="color:#666"><span style="padding:0 "></span><!-- -->2:00pm</span>' \
@@ -84,7 +84,7 @@ fake_data = '<div id="movie-results">' \
                 '</div>' \
             '</div>'
 
-def fetch_html(use_fake = True):
+def fetch_html(use_fake = False):
     if use_fake:
         return fake_data
     else:

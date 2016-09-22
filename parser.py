@@ -19,6 +19,14 @@ def get_imdb_id(movie_node):
             imdb_id = imdb_url.split('/title')[1].split('/')[1]
     return imdb_id
 
+def get_imdb_url(imdb_id):
+    if not imdb_id:
+        return ''
+    else:
+        imdb_base_url = 'http://www.imdb.com/title/'
+        imdb_url = imdb_base_url + imdb_id
+        return imdb_url
+
 def get_movie_showtimes(movie_node):
     times_node = movie_node.find('div', class_="times")
     showtimes_nodes = times_node.contents
@@ -69,15 +77,15 @@ def get_movies_from_html(data):
             theater_data = {'Info': theater_info, 'Name': theater_name, 'Url': theater_href, 'Showtimes': {'0': showtimes}}
             movie_title = get_movie_title(movie)
             movie_imdb_id = get_imdb_id(movie)
+            movie_imdb_url = get_imdb_url(movie_imdb_id)
             movie_identifier = movie_imdb_id
             has_imdb = True
             if not movie_imdb_id:
                 movie_identifier = movie_title
                 has_imdb = False
             if movie_identifier not in movies:
-                movies[movie_identifier] = {'Title': movie_title, 'HasImdb': has_imdb, 'Theaters': []}
+                movies[movie_identifier] = {'Title': movie_title, 'HasImdb': has_imdb, 'imdbUrl': movie_imdb_url, 'Theaters': []}
             movies[movie_identifier]['Theaters'].append(theater_data)
-
     return movies
 
 def get_movie_list(movies, use_fake=False):

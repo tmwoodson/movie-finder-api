@@ -11,6 +11,7 @@ expected_movies = {}
 expected_theater_url_base = 'https://google.com/movies/?'
 expected_movies['kittens'] = {
     'Title': 'A Fake Movie',
+    'imdbUrl': 'http://www.imdb.com/title/kittens',
     'HasImdb': True,
     'Theaters': [
         {
@@ -25,6 +26,7 @@ expected_movies['kittens'] = {
 }
 expected_movies['meow'] = {
     'Title': 'Two Cats One Bowl',
+    'imdbUrl': 'http://www.imdb.com/title/meow',
     'HasImdb': True,
     'Theaters': [
         {
@@ -39,6 +41,7 @@ expected_movies['meow'] = {
 }
 expected_movies['12345'] = {
     'Title': 'Big Momma\'s House',
+    'imdbUrl': 'http://www.imdb.com/title/12345',
     'HasImdb': True,
     'Theaters': [
         {
@@ -53,6 +56,7 @@ expected_movies['12345'] = {
 }
 expected_movies['Something Really Obscure'] = {
     'Title': 'Something Really Obscure',
+    'imdbUrl': '',
     'HasImdb': False,
     'Theaters': [
         {
@@ -135,6 +139,17 @@ class ParserTestCase(unittest.TestCase):
         result = parser.get_imdb_id(soup)
         self.assertEqual(result, None, 'improper handling for missing imdb id')
 
+    def test_imdb_url(self):
+        imdb_id = 'meow'
+        imdb_base_url = 'http://www.imdb.com/title/'
+        imdb_url = imdb_base_url + imdb_id
+        result = parser.get_imdb_url(imdb_id)
+        self.assertEqual(imdb_url, result, 'imdb url does not match')
+
+    def test_missing_imdb_url(self):
+        result = parser.get_imdb_url(None)
+        self.assertEqual(result, '', 'improper handling for missing imdb url')
+
     def test_movie_showtimes(self):
         showtimes = ['9:30pm', '10:30pm']
         movie_text = '<div class="movie">' \
@@ -210,6 +225,7 @@ class ParserTestCase(unittest.TestCase):
             self.assertEqual(expected['Title'], found['Title'], 'title mismatch for movie id ' + movie_id)
             self.assertEqual(expected['HasImdb'], found['HasImdb'],
                              'has_imdb mismatch for movie id ' + movie_id)
+            self.assertEqual(expected['imdbUrl'], found['imdbUrl'], 'imdb url mismatch for movie id ' + movie_id)
             expected_theaters = expected['Theaters']
             found_theaters = found['Theaters']
             self.assertEqual(len(found_theaters), len(expected_theaters), 'not the expected number of theaters for movie ' + movie_id)
