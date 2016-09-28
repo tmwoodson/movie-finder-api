@@ -16,7 +16,7 @@ fake_data = '<div id="movie-results">' \
                                 '<a href="fake.com">A Fake Movie</a>' \
                             '</div>' \
                             '<span class="info">' \
-                                '<a href="whatevs.com" />' \
+                                '<a href="/url?q=http://www.youtube.com/watch%3Fv%3Dkittens&sa=X&oi=movies&ii=0&usg=AFQjCNGPdXpCLQPrjg5Uwof6N87pL0YzhA">Trailer</a>' \
                                 '<a href="/url?q=http://www.imdb.com/title/kittens" />' \
                             '</span>' \
                             '<div class="times">' \
@@ -30,6 +30,7 @@ fake_data = '<div id="movie-results">' \
                                 '<a href="fake.com">Big Momma\'s House</a>' \
                             '</div>' \
                             '<span class="info">' \
+                                '<a href="/url?q=http://www.youtube.com/watch%3Fv%3D12345&sa=X&oi=movies&ii=0&usg=AFQjCNGPdXpCLQPrjg5Uwof6N87pL0YzhA">Trailer</a>' \
                                 '<a href="/url?q=http://www.imdb.com/title/12345" />' \
                             '</span>' \
                             '<div class="times">' \

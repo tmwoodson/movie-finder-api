@@ -12,6 +12,7 @@ expected_theater_url_base = 'https://google.com/movies/?'
 expected_movies['kittens'] = {
     'Title': 'A Fake Movie',
     'imdbUrl': 'http://www.imdb.com/title/kittens',
+    'TrailerUrl': 'http://www.youtube.com/watch?v=kittens',
     'HasImdb': True,
     'Theaters': [
         {
@@ -27,6 +28,7 @@ expected_movies['kittens'] = {
 expected_movies['meow'] = {
     'Title': 'Two Cats One Bowl',
     'imdbUrl': 'http://www.imdb.com/title/meow',
+    'TrailerUrl': '',
     'HasImdb': True,
     'Theaters': [
         {
@@ -42,6 +44,7 @@ expected_movies['meow'] = {
 expected_movies['12345'] = {
     'Title': 'Big Momma\'s House',
     'imdbUrl': 'http://www.imdb.com/title/12345',
+    'TrailerUrl': 'http://www.youtube.com/watch?v=12345',
     'HasImdb': True,
     'Theaters': [
         {
@@ -57,6 +60,7 @@ expected_movies['12345'] = {
 expected_movies['Something Really Obscure'] = {
     'Title': 'Something Really Obscure',
     'imdbUrl': '',
+    'TrailerUrl': '',
     'HasImdb': False,
     'Theaters': [
         {
@@ -150,6 +154,30 @@ class ParserTestCase(unittest.TestCase):
         result = parser.get_imdb_url(None)
         self.assertEqual(result, '', 'improper handling for missing imdb url')
 
+    def test_trailer_url(self):
+        trailer_url = 'http://www.youtube.com/watch?v=video_id'
+        trailer_href = '/url?q=' + trailer_url.replace('?', '%3F')
+        trailer_href = trailer_href.replace('=', '%3D') + '&sa=X&oi=movies&ii=0&usg=AFQjCNGPdXpCLQPrjg5Uwof6N87pL0YzhA'
+        movie_text = '<div class="movie">' \
+                        '<span class="info">' \
+                            '<a href="' + trailer_href + '">Trailer</a>' \
+                            '<a href="http://www.imdb.com/title/something"></a>' \
+                        '</span>' \
+                    '</div>'
+        soup = BeautifulSoup(movie_text, 'html.parser')
+        result = parser.get_trailer_url(soup)
+        self.assertEqual(trailer_url, result)
+
+    def test_missing_trailer_url(self):
+        movie_text = '<div class="movie">' \
+                        '<span class="info">' \
+                            '<a href="http://www.imdb.com/title/something"></a>' \
+                        '</span>' \
+                     '</div>'
+        soup = BeautifulSoup(movie_text, 'html.parser')
+        result = parser.get_trailer_url(soup)
+        self.assertEqual(result, '', 'improper handling for missing trailer url')
+
     def test_movie_showtimes(self):
         showtimes = ['9:30pm', '10:30pm']
         movie_text = '<div class="movie">' \
@@ -226,6 +254,9 @@ class ParserTestCase(unittest.TestCase):
             self.assertEqual(expected['HasImdb'], found['HasImdb'],
                              'has_imdb mismatch for movie id ' + movie_id)
             self.assertEqual(expected['imdbUrl'], found['imdbUrl'], 'imdb url mismatch for movie id ' + movie_id)
+            print 'expected: ' + expected['TrailerUrl']
+            print 'found:' + found['TrailerUrl']
+            self.assertEqual(expected['TrailerUrl'], found['TrailerUrl'], 'trailer url mismatch for movie id ' + movie_id)
             expected_theaters = expected['Theaters']
             found_theaters = found['Theaters']
             self.assertEqual(len(found_theaters), len(expected_theaters), 'not the expected number of theaters for movie ' + movie_id)

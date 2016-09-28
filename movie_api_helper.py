@@ -21,6 +21,8 @@ fake_data = {
               "Metascore":"33",
               "imdbRating":"5.1",
               "imdbVotes":"66,432",
+              "imdbUrl": "http://www.imdb.com/momma",
+              "TrailerUrl": "http://www.youtube.com/momma",
               "imdbID":"12345",
               "Type":"movie",
               "Response":"True"},
@@ -39,6 +41,8 @@ fake_data = {
               "imdbRating": "1.1",
               "imdbVotes": "66,432",
               "imdbID": "kittens",
+              "imdbUrl": "http://www.imdb.com/fake",
+              "TrailerUrl": "http://www.youtube.com/momma",
               "Type": "movie",
               "Response": "True"},
     'meow': {"Title": "Two Cats One Bowl",
@@ -56,6 +60,8 @@ fake_data = {
                 "imdbRating": "7.9",
                 "imdbVotes": "2",
                 "imdbID": "meow",
+                "imdbUrl": "http://www.imdb.com/meow",
+                "TrailerUrl": "http://www.youtube.com/meow",
                 "Type": "movie",
                 "Response": "True"},
     'Something Really Obscure': {"Title": "Something Really Obscure",
@@ -73,6 +79,8 @@ fake_data = {
                 "imdbRating": "10",
                 "imdbVotes": "1",
                 "imdbID": "huh",
+                "imdbUrl": "",
+                "TrailerUrl": "",
                 "Type": "movie",
                 "Response": "True"},
     'Not Even A Movie': {
@@ -102,4 +110,5 @@ def get_joined_movie_data(movie_identifier, movie, use_fake):
         result = json.loads(result)
     result['Theaters'] = movie['Theaters']
     result['imdbUrl'] = movie['imdbUrl']
+    result['TrailerUrl'] = movie['TrailerUrl']
     return result

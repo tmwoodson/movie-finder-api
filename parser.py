@@ -19,6 +19,22 @@ def get_imdb_id(movie_node):
             imdb_id = imdb_url.split('/title')[1].split('/')[1]
     return imdb_id
 
+def get_trailer_url(movie_node):
+    info_node = movie_node.find('span', class_='info')
+    info_anchors = info_node.find_all('a')
+    trailer_url = ''
+    if len(info_anchors) > 1:
+        trailer_anchor = info_anchors[0]
+        trailer_href = trailer_anchor['href'].split('&')[0]
+        href_parts = trailer_href.split('q=')
+        if len(href_parts) > 1:
+            trailer_href = href_parts[1]
+        else:
+            trailer_href = trailer_href.replace('/url?q%3D', '')
+        trailer_url = trailer_href.replace('%3F', '?')
+        trailer_url = trailer_url.replace('%3D', '=')
+    return trailer_url
+
 def get_imdb_url(imdb_id):
     if not imdb_id:
         return ''
@@ -77,6 +93,7 @@ def get_movies_from_html(data):
             theater_data = {'Info': theater_info, 'Name': theater_name, 'Url': theater_href, 'Showtimes': {'0': showtimes}}
             movie_title = get_movie_title(movie)
             movie_imdb_id = get_imdb_id(movie)
+            movie_trailer_url = get_trailer_url(movie)
             movie_imdb_url = get_imdb_url(movie_imdb_id)
             movie_identifier = movie_imdb_id
             has_imdb = True
@@ -84,7 +101,13 @@ def get_movies_from_html(data):
                 movie_identifier = movie_title
                 has_imdb = False
             if movie_identifier not in movies:
-                movies[movie_identifier] = {'Title': movie_title, 'HasImdb': has_imdb, 'imdbUrl': movie_imdb_url, 'Theaters': []}
+                movies[movie_identifier] = {
+                    'Title': movie_title,
+                    'HasImdb': has_imdb,
+                    'imdbUrl': movie_imdb_url,
+                    'TrailerUrl': movie_trailer_url,
+                    'Theaters': []
+                }
             movies[movie_identifier]['Theaters'].append(theater_data)
     return movies
 
