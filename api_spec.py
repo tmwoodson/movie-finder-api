@@ -244,7 +244,7 @@ class ParserTestCase(unittest.TestCase):
 
 
     def test_get_movies(self):
-        html_text = fetch_html(True)
+        html_text = fetch_html('94110', True)
         parsed_movies = parser.get_movies_from_html(html_text)
         self.assertEqual(len(parsed_movies.keys()), len(expected_movies.keys()), 'not the expected number of movies')
         for movie_id in expected_movies:
@@ -254,8 +254,6 @@ class ParserTestCase(unittest.TestCase):
             self.assertEqual(expected['HasImdb'], found['HasImdb'],
                              'has_imdb mismatch for movie id ' + movie_id)
             self.assertEqual(expected['imdbUrl'], found['imdbUrl'], 'imdb url mismatch for movie id ' + movie_id)
-            print 'expected: ' + expected['TrailerUrl']
-            print 'found:' + found['TrailerUrl']
             self.assertEqual(expected['TrailerUrl'], found['TrailerUrl'], 'trailer url mismatch for movie id ' + movie_id)
             expected_theaters = expected['Theaters']
             found_theaters = found['Theaters']
@@ -277,7 +275,7 @@ class ParserTestCase(unittest.TestCase):
 class MovieAPIHelperTestCase(unittest.TestCase):
 
     def test_movie_list(self):
-        html_text = fetch_html(True)
+        html_text = fetch_html('94110', True)
         parsed_movies = parser.get_movies_from_html(html_text)
         joined_movies = parser.get_movie_list(parsed_movies, True)
         self.assertIsInstance(joined_movies, list, 'parser.get_movie_list should return a list')

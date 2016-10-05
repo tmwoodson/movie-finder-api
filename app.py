@@ -1,7 +1,7 @@
 #!flask/bin/python
 # coding: utf-8
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from parser import get_movies
@@ -211,7 +211,11 @@ movies = [
 
 @app.route('/movies', methods=['GET'])
 def get_all_movies():
-    movies_to_return = get_movies()
+    zipcode = request.args.get('zip')
+    if not zipcode:
+        print 'defaulting to 94110'
+        zipcode = '94110'
+    movies_to_return = get_movies(zipcode)
     return jsonify({'movies': movies_to_return})
 
 if __name__ == '__main__':

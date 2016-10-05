@@ -85,11 +85,15 @@ fake_data = '<div id="movie-results">' \
                 '</div>' \
             '</div>'
 
-def fetch_html(use_fake = False):
+def get_source_url(zipcode):
+    url = 'https://www.google.com/movies?near=' + zipcode
+    return url
+
+def fetch_html(request_url, use_fake = False):
     if use_fake:
         return fake_data
     else:
-        url = 'https://www.google.com/movies?near=94110'
+        url = get_source_url(request_url)
         req = requests.get(url)
         data = req.text
         return data

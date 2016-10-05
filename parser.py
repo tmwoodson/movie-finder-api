@@ -115,8 +115,8 @@ def get_movie_list(movies, use_fake=False):
     joined_list = [get_joined_movie_data(movie_id, movies[movie_id], use_fake) for movie_id in movies]
     return joined_list
 
-def get_movies():
-    html_text = fetch_html()
+def get_movies(zipcode):
+    html_text = fetch_html(zipcode)
     movies_with_showtimes = get_movies_from_html(html_text)
     joined_movies = get_movie_list(movies_with_showtimes)
     return joined_movies
